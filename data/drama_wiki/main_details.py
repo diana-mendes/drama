@@ -43,6 +43,7 @@ def _extract_main_details_from_drama_page(url):
 
 
 def _write_main_details_to_file(input_file, output_file):
+	main_details = []
 	f = open(input_file, "r")
 	for drama_link in f:
 		url = "https://wiki.d-addicts.com" + drama_link
@@ -56,7 +57,6 @@ def _write_main_details_to_file(input_file, output_file):
 
 
 if __name__ == "__main__":
-	main_details = []
 	year = "2020"
 	input_file = "/Users/diana/Desktop/drama_reco/dramawiki_" + year + "_dramas.csv"
 	output_file = "/Users/diana/Desktop/drama_reco/dramawiki_" + year + "_dramas_main_details.csv"
