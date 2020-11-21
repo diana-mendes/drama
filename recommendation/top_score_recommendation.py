@@ -34,10 +34,15 @@ class TopScoreRecommendation:
 		self.data = _load_data()
 
 	def _get_input_genre(self, input_drama):
-		return self.data[self.data[NAME_COL] == input_drama][GENRE_COL].values[0]  # only returns first value
+		found_genre = self.data[self.data[NAME_COL] == input_drama][GENRE_COL]
+		if len(found_genre) > 0:
+			return self.data[self.data[NAME_COL] == input_drama][GENRE_COL].values[0]  # only returns first value
+		else:
+			return None
 
 	def get_top_recos(self, input_drama, k=3):
 		genre = self._get_input_genre(input_drama)
+		if genre is None:
+			return []
 		genre_candidates = self.data[(self.data[GENRE_COL] == genre) & (self.data[NAME_COL] != input_drama)]
-
 		return genre_candidates[NAME_COL].head(k).tolist()
