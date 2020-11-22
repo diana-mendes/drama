@@ -3,7 +3,8 @@ from data.drama_wiki.data_cleaning.utils import *
 DATA_PATH = '/Users/diana/drama/data/'  # TODO change this
 RAW_FILES_ENDING = 'extracted_fields.csv'
 MAIN_DETAILS_PROCESS_COLS = ['genre', 'episodes', 'network', 'user_rating','number_of_votes', 'main_cast'] #'synopsis',
-MAIN_DETAILS_OUTPUT_COLS = ['main_name'] + MAIN_DETAILS_PROCESS_COLS
+MAIN_NAME_COL = 'main_name'
+MAIN_DETAILS_OUTPUT_COLS = [MAIN_NAME_COL] + MAIN_DETAILS_PROCESS_COLS
 OUTPUT_FILE_PATH = os.path.join(DATA_PATH, 'clean_data_files/clean_fields.csv')
 
 
@@ -56,10 +57,10 @@ if __name__ == "__main__":
 	df['number_of_votes_clean'] = df.apply(lambda x: clean_user_rating(x.number_of_votes), axis=1)
 	df['main_cast_clean'] = df.apply(lambda x: clean_main_cast(x.main_cast), axis=1)
 
-
 	drop_raw_cols_and_rename_clean(df, MAIN_DETAILS_PROCESS_COLS)
 
-	remove_duplicates(df, MAIN_DETAILS_OUTPUT_COLS)
+	remove_duplicates(df, MAIN_NAME_COL)
+	print(df.shape)
 
 	df[MAIN_DETAILS_OUTPUT_COLS].to_csv(OUTPUT_FILE_PATH, sep='\t', index=False)
 

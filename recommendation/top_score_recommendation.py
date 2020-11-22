@@ -1,13 +1,14 @@
-import os
 import pandas as pd
 
-DATA_PATH = 'data/'
+DATA_PATH = 'data/clean_data_files/clean_fields.csv'
 
 NAME_COL = 'main_name'
 GENRE_COL = 'genre'
-CSV_COLUMNS_TO_KEEP = [NAME_COL, GENRE_COL]
+REVIEW_SCORE_COL = 'user_rating'
+NUMBER_REVIEWS_COL = 'number_of_votes'
+CSV_COLUMNS_TO_KEEP = [NAME_COL, GENRE_COL, REVIEW_SCORE_COL, NUMBER_REVIEWS_COL]
 
-# TODO: merge other details to add score and filter by it
+WEIGHTED_SCORE_COL = 'weighted_score'
 
 
 def _load_data():
@@ -15,18 +16,21 @@ def _load_data():
 	Loads data for recommendation from CSV files.
 	:return: pd.DataFrame with CSV_COLUMNS_TO_KEEP for all data found
 	"""
-	files = [f for f in os.listdir(DATA_PATH) if 'main_details.csv' in f]
+	df = pd.read_csv(DATA_PATH, sep='\t')[CSV_COLUMNS_TO_KEEP]
+	_convert_data_types(df)
+	return df
 
-	all_data = []
-	for f in files:
-		df = pd.read_csv(os.path.join(DATA_PATH, f), sep='\t')
-		all_data.append(df[CSV_COLUMNS_TO_KEEP])
 
-	# do some info
-	all_data_df = pd.concat(all_data, axis=0, ignore_index=True)
-	all_data_df.columns = CSV_COLUMNS_TO_KEEP
+def _convert_data_types(df):
+	df[NUMBER_REVIEWS_COL].fillna(0, inplace=True)
+	df[REVIEW_SCORE_COL] = df[REVIEW_SCORE_COL].astype(float)
+	df[NUMBER_REVIEWS_COL] = df[NUMBER_REVIEWS_COL].astype(int)
 
-	return all_data_df
+
+def _calculate_weighted_score(df):
+	df['weight_factor'] = df.apply(lambda x: min(5, x[NUMBER_REVIEWS_COL])/5, axis=1)
+	df[WEIGHTED_SCORE_COL] = df[REVIEW_SCORE_COL] * df['weight_factor']
+	df.drop('weight_factor', axis=1, inplace=True)
 
 
 class TopScoreRecommendation:
@@ -40,9 +44,14 @@ class TopScoreRecommendation:
 		else:
 			return None
 
-	def get_top_recos(self, input_drama, k=3):
+	def get_top_recos_by_weighted_score(self, input_drama, k=3):
 		genre = self._get_input_genre(input_drama)
 		if genre is None:
 			return []
-		genre_candidates = self.data[(self.data[GENRE_COL] == genre) & (self.data[NAME_COL] != input_drama)]
-		return genre_candidates[NAME_COL].head(k).tolist()
+		genre_candidates = self.data[(self.data[GENRE_COL] == genre) & (self.data[NAME_COL] != input_drama)].copy()
+		if len(genre_candidates) == 0:
+			return []
+		_calculate_weighted_score(genre_candidates)
+		recommended = genre_candidates.sort_values(by=WEIGHTED_SCORE_COL, ascending=False).head(k)
+		print(recommended[CSV_COLUMNS_TO_KEEP])
+		return recommended[NAME_COL].tolist()

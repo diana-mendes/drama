@@ -34,7 +34,7 @@ def process_numeric_field(input_text):  # todo: rename
 	if is_null_or_empty(input_text):
 		return None
 	clean_text = input_text.strip()
-	if clean_text.isalpha():
+	if not re.match('^[0-9\.]*$', clean_text):
 		return None
 	return clean_text
 
@@ -60,7 +60,9 @@ def load_raw_data(data_path, common_filename_part, cols):
 
 
 def remove_duplicates(df, cols):
-	df[cols].drop_duplicates(inplace=True)
+	if len(cols) == 1:
+		cols = [cols]
+	df.drop_duplicates(subset=cols, inplace=True)  # TODO: logic to keep row with most info instead of random pick
 
 
 def drop_raw_cols_and_rename_clean(df, process_cols):
