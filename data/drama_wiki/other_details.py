@@ -85,22 +85,22 @@ def extract_other_details_from_drama_page(url):
 	return synopsis, user_rating, number_of_votes, main_cast
 
 
-def _write_other_details_to_file(input_file, output_file):
-	other_details = []
-	f = open(input_file, "r")
-	for drama_link in f:
-		url = "https://wiki.d-addicts.com" + drama_link
-		print(url)
-		synopsis, user_rating, number_of_votes, main_cast = extract_other_details_from_drama_page(url)
-		other_details.append((synopsis, user_rating, number_of_votes, main_cast))
-	column_names = ["synopsis", "user_rating", "number_of_votes", "main_cast"]
-	pd.DataFrame(other_details, columns=column_names).to_csv(output_file, sep='\t', index=False)
-
-
-if __name__ == "__main__":
-	year = "2019"
-	input_file = "/Users/diana/drama/data/dramawiki_" + year + "_dramas.csv"
-	output_file = "/Users/diana/drama/data/dramawiki_" + year + "_dramas_other_details.csv"
-	_write_other_details_to_file(input_file, output_file)
+# def _write_other_details_to_file(input_file, output_file):
+# 	other_details = []
+# 	f = open(input_file, "r")
+# 	for drama_link in f:
+# 		url = "https://wiki.d-addicts.com" + drama_link
+# 		print(url)
+# 		synopsis, user_rating, number_of_votes, main_cast = extract_other_details_from_drama_page(url)
+# 		other_details.append((synopsis, user_rating, number_of_votes, main_cast))
+# 	column_names = ["synopsis", "user_rating", "number_of_votes", "main_cast"]
+# 	pd.DataFrame(other_details, columns=column_names).to_csv(output_file, sep='\t', index=False)
+#
+#
+# if __name__ == "__main__":
+# 	year = "2019"
+# 	input_file = "/Users/diana/drama/data/dramawiki_" + year + "_dramas.csv"
+# 	output_file = "/Users/diana/drama/data/dramawiki_" + year + "_dramas_other_details.csv"
+# 	_write_other_details_to_file(input_file, output_file)
 
 

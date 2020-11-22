@@ -2,6 +2,7 @@ from bs4 import BeautifulSoup
 from urllib.request import urlopen
 import pandas as pd
 
+from data.drama_wiki.other_details import extract_other_details_from_drama_page
 
 def _extract_list_contents_main_details(list_contents):
 	contents_converted_to_string = []
@@ -11,7 +12,7 @@ def _extract_list_contents_main_details(list_contents):
 	return ";".join(contents_converted_to_string)
 
 
-def _extract_main_details_from_drama_page(url):
+def extract_main_details_from_drama_page(url):
 	"""
 	Extracts main details from drama page. Example input url: 'https://wiki.d-addicts.com/Hi_Bye_Mama!'
 	"""
@@ -42,22 +43,26 @@ def _extract_main_details_from_drama_page(url):
 	return main_name, title, genre, episodes, network, broadcast_period, airtime
 
 
-def _write_main_details_to_file(input_file, output_file):
-	main_details = []
-	f = open(input_file, "r")
-	for drama_link in f:
-		url = "https://wiki.d-addicts.com" + drama_link
-		print(url)
-		(main_name, title, genre, episodes, network, broadcast_period, airtime) = \
-			_extract_main_details_from_drama_page(url)
-		main_details.append((main_name, title, genre, episodes, network, broadcast_period, airtime))
-	column_names = ["main_name", "title", "genre", "episodes", "network", "broadcast_period", "airtime"]
-	pd.DataFrame(main_details, columns=column_names).to_csv(output_file, sep='\t', index=False)
-
-
-
-if __name__ == "__main__":
-	year = "2020"
-	input_file = "/Users/diana/Desktop/drama_reco/dramawiki_" + year + "_dramas.csv"
-	output_file = "/Users/diana/Desktop/drama_reco/dramawiki_" + year + "_dramas_main_details.csv"
-	_write_main_details_to_file(input_file, output_file)
+# def _write_main_details_to_file(input_file, output_file):
+# 	main_details = []
+# 	f = open(input_file, "r")
+# 	for drama_link in f:
+# 		url = "https://wiki.d-addicts.com" + drama_link
+# 		print(url)
+# 		main_name, title, genre, episodes, network, broadcast_period, airtime = \
+# 			extract_main_details_from_drama_page(url)
+# 		synopsis, user_rating, number_of_votes, main_cast = \
+# 			extract_other_details_from_drama_page(url)
+# 		main_details.append((main_name, title, genre, episodes, network, broadcast_period, airtime, synopsis,
+# 		                     user_rating, number_of_votes, main_cast))
+# 	column_names = ["main_name", "title", "genre", "episodes", "network", "broadcast_period", "airtime", "synopsis",
+# 	                "user_rating", "number_of_votes", "main_cast"]
+# 	pd.DataFrame(main_details, columns=column_names).to_csv(output_file, sep='\t', index=False)
+#
+#
+#
+# if __name__ == "__main__":
+# 	year = "2020"
+# 	input_file = "/Users/diana/Desktop/drama_reco/dramawiki_" + year + "_dramas.csv"
+# 	output_file = "/Users/diana/Desktop/drama_reco/dramawiki_" + year + "_dramas_main_details.csv"
+# 	_write_main_details_to_file(input_file, output_file)
