@@ -40,13 +40,9 @@ def clean_main_cast(raw_main_cast):
 	if is_null_or_empty(raw_main_cast):
 		return None
 	main_cast = raw_main_cast.strip()
-	print(main_cast)
 	cast_members = main_cast.split("|")
-	# print(cast_members)
 	cast_members = [g.strip().lower() for g in cast_members]
-	# print(cast_members)
 	cast_members = [clean_cast_member(g) for g in cast_members]
-	print(cast_members)
 	return format_list_fields(cast_members)
 
 
