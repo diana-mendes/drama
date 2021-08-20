@@ -5,8 +5,8 @@ import tensorflow as tf
 from .enrich_request import get_input_genre
 
 # TODO: change these to local paths
-VOCAB_PATH = '/content/drive/MyDrive/drama/resources/genre_one_hot_encoder_vocab.csv'
-GENRE_ONE_HOT_LOOKUP_PATH = '/content/drive/MyDrive/drama/resources/genre_one_hot_lookup.csv'
+VOCAB_PATH = 'resources/genre_one_hot_encoder_vocab.csv'
+GENRE_ONE_HOT_LOOKUP_PATH = 'resources/genre_one_hot_lookup.csv'
 NAME_COL = 'main_name'
 
 def load_one_hot_vectors(lookup_path):
@@ -75,6 +75,18 @@ def get_genre_one_hot_encoder_model():  # TODO: implement training encoder somew
   return model
 
 
+def load_genre_vectorizer_layer(layer, vocab):
+  """
+  Sets `vocab` as the vocabulary of `layer`.
+  
+  :param layer: tf.keras.layers.experimental.preprocessing.TextVectorization
+  :param vocab: List of strings (vocabulary elements)
+  
+  :return tf.keras.layers.experimental.preprocessing.TextVectorization 
+  """
+  layer.set_vocabulary(vocab)
+
+
 def read_genre_vocab(vocab_path):
   """
   Reads vocabulary for genre one hot encoder from CSV file. 
@@ -99,6 +111,8 @@ class GenreRecommendation:
 
     def get_genre_recommendation(self, input_drama, k=3):
         genre = get_input_genre(input_drama)
+        if genre is None:
+          return []
         genre_one_hot = self.genre_one_hot_model.predict(genre)
 
         # get top dramas

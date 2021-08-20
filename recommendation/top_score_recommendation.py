@@ -1,8 +1,5 @@
-import sys
-import os
 import pandas as pd
 
-sys.path.append("..")
 DATA_PATH = 'data/clean_data_files/clean_fields.csv'
 
 NAME_COL = 'main_name'
@@ -19,7 +16,6 @@ def _load_data():
 	Loads data for recommendation from CSV files.
 	:return: pd.DataFrame with CSV_COLUMNS_TO_KEEP for all data found
 	"""
-	# data_path = os.path.join(DATA_PATH)
 	df = pd.read_csv(DATA_PATH, sep='\t')[CSV_COLUMNS_TO_KEEP]
 	_convert_data_types(df)
 	return df
