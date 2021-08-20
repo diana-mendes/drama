@@ -13,7 +13,7 @@ CSV_COLUMNS_TO_KEEP = [NAME_COL, GENRE_COL, REVIEW_SCORE_COL, NUMBER_REVIEWS_COL
 
 WEIGHTED_SCORE_COL = 'weighted_score'
 
-
+# TODO: use the ones in enrich_request
 def _load_data():
 	"""
 	Loads data for recommendation from CSV files.
