@@ -1,10 +1,8 @@
 import sys
-import os
 import pandas as pd
+import tensorflow as tf
 
-sys.path.append("..")
-
-from enrich_request import get_input_genre
+from .enrich_request import get_input_genre
 
 # TODO: change these to local paths
 VOCAB_PATH = '/content/drive/MyDrive/drama/resources/genre_one_hot_encoder_vocab.csv'
@@ -40,7 +38,7 @@ def _print_info(request, selected_drama_names, vocab, one_hot_selected_dramas):
           lookup_genres_from_one_hot_vector(selected_drama_genre_one_hot, vocab))
 
 
-def calculate_cosine_similarity_and_retrieve_top_k(request, all_data, k=3, debug=False, vocab=None):
+def calculate_cosine_similarity_and_retrieve_top_k(request, all_data, k, debug=False, vocab=None):
   from sklearn.metrics.pairwise import cosine_similarity as sklearn_cosine_similarity
   
   drama_names = all_data.index
@@ -96,18 +94,19 @@ def load_one_hot_vectors(lookup_path):
 
 
 class GenreRecommendation:
-    def __init__:
-        genre_one_hot_model = get_genre_one_hot_encoder_model()
+    def __init__(self):
+        self.genre_one_hot_model = get_genre_one_hot_encoder_model()
 
-    def get_genre_recommendation(input_drama):
+    def get_genre_recommendation(self, input_drama, k=3):
         genre = get_input_genre(input_drama)
-        genre_one_hot = genre_one_hot_model.predict(genre)
+        genre_one_hot = self.genre_one_hot_model.predict(genre)
 
         # get top dramas
         all_data_genre_one_hot = load_one_hot_vectors(GENRE_ONE_HOT_LOOKUP_PATH)
         vocab = read_genre_vocab(VOCAB_PATH)
 
-        return calculate_cosine_similarity_and_retrieve_top_k(request_genre_one_hot, 
+        return calculate_cosine_similarity_and_retrieve_top_k(genre_one_hot, 
                                                             all_data_genre_one_hot, 
+                                                            k,
                                                             debug=True,
                                                             vocab=vocab)

@@ -11,7 +11,7 @@ def recommend(request):
 	:return: list of recommended drama names
 	"""
 	recommender = TopScoreRecommendation()
-	drama_list = recommender.get_top_recos_by_weighted_score(request, 3)
+	drama_list = recommender.get_top_recos_by_review_weighted_score(request, 3)
 	return drama_list
 
 

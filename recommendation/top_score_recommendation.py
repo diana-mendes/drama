@@ -19,8 +19,8 @@ def _load_data():
 	Loads data for recommendation from CSV files.
 	:return: pd.DataFrame with CSV_COLUMNS_TO_KEEP for all data found
 	"""
-	data_path = os.path.join(os.path.abspath('..'), DATA_PATH)
-	df = pd.read_csv(data_path, sep='\t')[CSV_COLUMNS_TO_KEEP]
+	# data_path = os.path.join(DATA_PATH)
+	df = pd.read_csv(DATA_PATH, sep='\t')[CSV_COLUMNS_TO_KEEP]
 	_convert_data_types(df)
 	return df
 
