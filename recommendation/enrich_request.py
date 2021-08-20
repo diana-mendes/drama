@@ -26,25 +26,25 @@ def _convert_data_types(df):
 
 
 def preprocess_genre_data(df, keep_name_col=False):
-  """
-  """
-  df = df[[NAME_COL, GENRE_COL]].dropna()
-  formatted_genre_col = GENRE_COL+'_formatted'
-  df[formatted_genre_col] = df[GENRE_COL].apply(lambda x: x.replace("|", " "))
-  df.drop(GENRE_COL, axis=1, inplace=True)
-  df.rename(columns={formatted_genre_col: GENRE_COL}, inplace=True)
-  if keep_name_col:
-    return df
-  else:
-    return df[GENRE_COL].values
+	"""
+	"""
+	df = df[[NAME_COL, GENRE_COL]].dropna()
+	formatted_genre_col = GENRE_COL+'_formatted'
+	df[formatted_genre_col] = df[GENRE_COL].apply(lambda x: x.replace("|", " "))
+	df.drop(GENRE_COL, axis=1, inplace=True)
+	df.rename(columns={formatted_genre_col: GENRE_COL}, inplace=True)
+	if keep_name_col:
+		return df
+	else:
+		return df[GENRE_COL].values
 
 
 def get_input_genre(input_drama):
-    drama_data = _load_data()
-    drama_data = preprocess_genre_data(drama_data, keep_name_col=True)
+		drama_data = _load_data()
+		drama_data = preprocess_genre_data(drama_data, keep_name_col=True)
 
-    found_genre = drama_data[drama_data[NAME_COL] == input_drama][GENRE_COL]
-    if len(found_genre) > 0:
-        return found_genre.values.tolist()
-    else:
-        return None
+		found_genre = drama_data[drama_data[NAME_COL] == input_drama][GENRE_COL]
+		if len(found_genre) > 0:
+				return found_genre.values.tolist()
+		else:
+				return None
