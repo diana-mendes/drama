@@ -1,3 +1,5 @@
 *.ipynb
 /notebooks
 /data/dramawiki*.csv
+/scripts
+/resources
